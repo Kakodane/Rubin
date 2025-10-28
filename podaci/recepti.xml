@@ -1,0 +1,25 @@
+<model.podaci.ReceptiLista>
+  <recepti>
+    <model.Recept>
+      <nazivRecepta>Recept neki</nazivRecepta>
+      <uputstvo>Nozem u glavu</uputstvo>
+      <datumKreiranja>2025-10-28</datumKreiranja>
+      <sastojci>
+        <model.Sastojak>
+          <naziv>So</naziv>
+          <proizvodjac>Dijamant</proizvodjac>
+        </model.Sastojak>
+        <model.Sastojak>
+          <naziv>Biber</naziv>
+          <proizvodjac>Dijamant</proizvodjac>
+        </model.Sastojak>
+      </sastojci>
+      <alati>
+        <model.KuhinjskiAlat>
+          <naziv>Nož</naziv>
+        </model.KuhinjskiAlat>
+      </alati>
+      <slike/>
+    </model.Recept>
+  </recepti>
+</model.podaci.ReceptiLista>

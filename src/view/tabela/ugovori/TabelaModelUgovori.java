@@ -1,5 +1,6 @@
 package view.tabela.ugovori;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Flow.Publisher;
 import java.util.concurrent.Flow.Subscriber;
@@ -9,6 +10,7 @@ import javax.swing.table.AbstractTableModel;
 
 import model.KorisnickiNalog;
 import model.Korisnik;
+import observer.IzmenaTabeleEvent;
 import observer.Observer;
 import util.PogledUtil;
 
@@ -95,20 +97,23 @@ public class TabelaModelUgovori extends AbstractTableModel implements observer.P
 
 	@Override
 	public void addObserver(Observer observer) {
-		// TODO Auto-generated method stub
-		
+		if (observers == null)
+			observers = new ArrayList<Observer>();
+		observers.add(observer);	
 	}
 
 	@Override
 	public void removeObserver(Observer observer) {
-		// TODO Auto-generated method stub
-		
+		if (null == observers)
+			return;
+		observers.remove(observer);
 	}
 
 	@Override
 	public void notifyObservers() {
-		// TODO Auto-generated method stub
-		
+		for (Observer observer : observers) {
+			observer.updatePerformed(new IzmenaTabeleEvent());
+		}
 	}
 
 }

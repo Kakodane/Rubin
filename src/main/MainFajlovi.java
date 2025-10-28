@@ -11,6 +11,7 @@ public class MainFajlovi {
 
     public static void main(String[] args) throws IOException, ResultEmptyException {
         //Pokretanje.inicijalizujKorisnike();
+    	//Pokretanje.inicijalizujRecept();
         Serijalizacija serijalizacija = new Serijalizacija();
         //serijalizacija.sacuvaj();
         serijalizacija.ucitaj();

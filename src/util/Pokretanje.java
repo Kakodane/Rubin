@@ -12,7 +12,11 @@ import java.util.Arrays;
 import enums.Uloga;
 import model.KorisnickiNalog;
 import model.Korisnik;
+import model.KuhinjskiAlat;
+import model.Recept;
+import model.Sastojak;
 import model.podaci.KorisniciLista;
+import model.podaci.ReceptiLista;
 //import enums.Uloga;
 //import model.Cena;
 //import model.Cenovnik;
@@ -51,57 +55,30 @@ public class Pokretanje {
         }
     }
 
-    public static void inicijalizujJela() throws IOException {
-//        JelaLista jelaLista = JelaLista.getInstance();
-//        TipJelaLista tipJelaLista = TipJelaLista.getInstance();
-//        CenovnikLista cenovnikLista = CenovnikLista.getInstance();
-//
-//        TipJela tipJela1 = new TipJela(1, "Rostilj");
-//        TipJela tipJela2 = new TipJela(2, "Paste");
-//        TipJela tipJela3 = new TipJela(3, "Supe i čorbe");
-//
-//        Jelo jelo1 = new Jelo(1, "Ćevapi", "Odlični ćevapi","adadsad", false, tipJela1, new SlikaJela("/cevapi.jpg"));
-//        Jelo jelo2 = new Jelo(2, "Kobasica", "Prava domaca","dfgdfg", false, tipJela1, new SlikaJela("/rostiljKobasica.jpg"));
-//        Jelo jelo3 = new Jelo(3, "Mesano meso", "Svega po malo, 1kg","cvbcvb", false, tipJela1, new SlikaJela("/mesanoMeso.jpg"));
-//
-//        Cena cena1 = new Cena(350, 0, LocalDate.parse("2020-07-04"));
-//        Cena cena2 = new Cena(280, 0, LocalDate.parse("2021-05-10"));
-//        Cena cena3 = new Cena(1100, 0, LocalDate.parse("2018-03-12"));
-//        Cena cena4 = new Cena(1100, 0, LocalDate.parse("2019-03-12"));
-//
-//        Cenovnik cenovnik1 = new Cenovnik(1, new ArrayList<Cena>(Arrays.asList(cena1, cena2)));
-//        Cenovnik cenovnik2 = new Cenovnik(2, new ArrayList<Cena>(Arrays.asList(cena2, cena3)));
-//        Cenovnik cenovnik3 = new Cenovnik(3, new ArrayList<Cena>(Arrays.asList(cena3, cena4)));
-//
-//        tipJelaLista.dodajTipJela(tipJela1);
-//        tipJelaLista.dodajTipJela(tipJela2);
-//        tipJelaLista.dodajTipJela(tipJela3);
-//
-//        jelaLista.dodajJelo(jelo1);
-//        jelaLista.dodajJelo(jelo2);
-//        jelaLista.dodajJelo(jelo3);
-//
-//        cenovnikLista.dodajCenovnik(cenovnik1);
-//        cenovnikLista.dodajCenovnik(cenovnik2);
-//        cenovnikLista.dodajCenovnik(cenovnik3);
-//
-//        Serijalizacija serijalizacija = new Serijalizacija();
-//        File fajlTipoviJela = new File("./podaci/tipoviJela.xml");
-//        File fajlJela = new File("./podaci/jela.xml");
-//        File fajlCenovnik = new File("./podaci/cenovnik.xml");
-//        OutputStream osTipoviJela = new BufferedOutputStream(new FileOutputStream(fajlTipoviJela));
-//        OutputStream osJela = new BufferedOutputStream(new FileOutputStream(fajlJela));
-//        OutputStream osCenovnik = new BufferedOutputStream(new FileOutputStream(fajlCenovnik));
-//
-//        try {
-//            serijalizacija.getXStream().toXML(tipJelaLista, osTipoviJela);
-//            serijalizacija.getXStream().toXML(jelaLista, osJela);
-//            serijalizacija.getXStream().toXML(cenovnikLista, osCenovnik);
-//        } finally {
-//            osTipoviJela.close();
-//            osJela.close();
-//            osCenovnik.close();
-//        }
-    }
+    public static void inicijalizujRecept() throws IOException {
+    	KuhinjskiAlat noz = new KuhinjskiAlat("Nož");
+    	LocalDate datum = LocalDate.now();
+    	Sastojak so = new Sastojak("So", "Dijamant");
+    	Sastojak biber = new Sastojak("Biber", "Dijamant");
+    	ArrayList<Sastojak> sastojci = new ArrayList<Sastojak>();
+    	sastojci.add(so);
+    	sastojci.add(biber);
+    	ArrayList<KuhinjskiAlat> alati = new ArrayList<KuhinjskiAlat>();
+    	alati.add(noz);
+    	ArrayList<model.Slika> slike = new ArrayList<model.Slika>();
+		Recept recept = new Recept("Recept neki","Nozem u glavu",datum,sastojci, alati, slike);
+		ReceptiLista.getInstance().dodajRecept(recept);
+		Serijalizacija serijalizacija = new Serijalizacija();
+		File f = new File("./podaci/recepti.xml");
+		OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
+		try {
+			serijalizacija.getXStream().toXML(recept, os);
+		} finally {
+			os.close();
+		}
+	}
+
+	
+    
 
 }

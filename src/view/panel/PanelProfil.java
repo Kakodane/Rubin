@@ -39,7 +39,6 @@ public class PanelProfil extends JPanel implements Observer {
 	private Labela lblImeVr;
 	private Labela lblPrezimeVr;
 	private Labela lblTelefonVr;
-	private Labela lblEmailVr;
 	
 	public PanelProfil(PocetniProzor pocetniProzor) {
 		setName("Profil");

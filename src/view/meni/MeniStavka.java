@@ -25,12 +25,12 @@ public class MeniStavka extends JPanel {
 	public MeniStavka(String ikonica, String naziv) {
 		
 		setPreferredSize(new Dimension(250, 30));
-		setBackground(new Color(16, 97, 4));
+		setBackground(new Color(102, 0, 102));
 		
 		lblIkonica = new JLabel("");
 		Image image = new ImageIcon(this.getClass().getResource(ikonica)).getImage();
 		lblIkonica.setIcon(new ImageIcon(image));
-		btnStavka = new FormaDugme(naziv, new Color(16, 97, 4), Color.WHITE, 170, 30);
+		btnStavka = new FormaDugme(naziv, new Color(0, 102, 255), Color.WHITE, 170, 30);
 		
 		add(lblIkonica);
 		add(btnStavka);
