@@ -18,7 +18,6 @@ public class Korisnik implements Publisher {
     private String ime;
     private String prezime;
     private String telefon;
-    private String email;
     private LocalDate datumRodjenja;
     private LocalDate datumZaposlenja;
     private KorisnickiNalog korisnickiNalog;
@@ -28,14 +27,13 @@ public class Korisnik implements Publisher {
 
     public Korisnik() {}
 
-    public Korisnik(long id, String ime, String prezime, String telefon, String email, LocalDate datumRodjenja,
+    public Korisnik(long id, String ime, String prezime, String telefon, LocalDate datumRodjenja,
                     LocalDate datumZaposlenja, KorisnickiNalog korisnickiNalog) {
         super();
         this.id = id;
         this.ime = ime;
         this.prezime = prezime;
         this.telefon = telefon;
-        this.email = email;
         this.datumRodjenja = datumRodjenja;
         this.datumZaposlenja = datumZaposlenja;
         this.korisnickiNalog = korisnickiNalog;
@@ -73,13 +71,6 @@ public class Korisnik implements Publisher {
         this.telefon = telefon;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public LocalDate getDatumRodjenja() {
         return datumRodjenja;
@@ -105,11 +96,10 @@ public class Korisnik implements Publisher {
         this.korisnickiNalog = korisnickiNalog;
     }
 
-    public void azurirajKorisnika(String ime, String prezime, String telefon, String email) {
+    public void azurirajKorisnika(String ime, String prezime, String telefon) {
         this.setIme(ime);
         this.setPrezime(prezime);
         this.setTelefon(telefon);
-        this.setEmail(email);
         this.notifyObservers();
     }
 

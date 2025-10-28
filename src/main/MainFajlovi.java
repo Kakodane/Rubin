@@ -10,8 +10,9 @@ import util.Pokretanje;
 public class MainFajlovi {
 
     public static void main(String[] args) throws IOException, ResultEmptyException {
-        Pokretanje.inicijalizujJela();
+        //Pokretanje.inicijalizujKorisnike();
         Serijalizacija serijalizacija = new Serijalizacija();
+        //serijalizacija.sacuvaj();
         serijalizacija.ucitaj();
         PrijavaProzor prijavaProzor = new PrijavaProzor();
         prijavaProzor.setVisible(true);
