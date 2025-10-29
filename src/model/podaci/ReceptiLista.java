@@ -72,6 +72,11 @@ public class ReceptiLista {
 		return null;
 	}
 	
+	public boolean obrisiRecept(Recept recept) {
+	    boolean removed = recepti.remove(recept);
+	    return removed;
+	}
+	
 	public List<Recept> dobaviRecepte(){
 		return recepti;
 	}

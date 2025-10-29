@@ -13,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import kontroler.ReceptiKontroler;
 import model.Recept;
 import view.dijalog.DialogIzmenaProfila;
 import view.dijalog.DijalogIzmenaRecepta;
@@ -48,7 +49,8 @@ implements TableCellRenderer, TableCellEditor, MouseListener {
 		            int modelRow = tabela.convertRowIndexToModel(viewRow);
 		            TabelaModelRecepti model = (TabelaModelRecepti) tabela.getModel();
 		            Recept recept = model.getAt(modelRow);
-				DijalogIzmenaRecepta dialog = new DijalogIzmenaRecepta(recept);
+		            ReceptiKontroler kontroler=new ReceptiKontroler();
+				DijalogIzmenaRecepta dialog = new DijalogIzmenaRecepta(recept,kontroler,model);
 				dialog.setVisible(true);
 			}
 		});

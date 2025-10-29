@@ -18,5 +18,4 @@ public class MainFajlovi {
         PrijavaProzor prijavaProzor = new PrijavaProzor();
         prijavaProzor.setVisible(true);
     }
-
 }

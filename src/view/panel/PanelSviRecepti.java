@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.EventObject;
 
@@ -12,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
+import java.util.List;
 import kontroler.ReceptiKontroler;
 import model.Recept;
 import net.miginfocom.swing.MigLayout;
@@ -52,7 +54,7 @@ public class PanelSviRecepti extends JPanel implements observer.Observer {
 
         TekstPolje txtAreaRecepti = new TekstPolje("", fntTekstPolje, 240, 30);
         FormaDugme btnPretrazi    = new FormaDugme("Pretraži", clrPrimarna, clrForeground, 95, 28);
-
+       
         // ===== MIG LAYOUT =====
         setLayout(new MigLayout(
             "fill, insets 20 30 20 30",
@@ -64,10 +66,11 @@ public class PanelSviRecepti extends JPanel implements observer.Observer {
         add(lblNaslov, "align center, wrap");
         add(lblImage,  "align center, wrap");
 
-        // Red za pretragu (polje + dugme)
+        // Red za pretragu (polje + dugmad)
         add(txtAreaRecepti, "split 2, growx");          // polje zauzima širinu
         add(btnPretrazi,    "w 110!, h 32!, wrap");     // normalno dugme
-
+ 
+        
         // Tabela ispod – rasteže se
         JScrollPane scrollPane = inicijalizujTabeluRecepata();
         add(scrollPane, "grow, push, span, wrap");

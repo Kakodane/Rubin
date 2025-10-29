@@ -4,31 +4,45 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.EventObject;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import izuzeci.BadCredentialsException;
+import izuzeci.BadFormatException;
+import izuzeci.MissingValueException;
+import izuzeci.NotSavedException;
+import kontroler.ReceptiKontroler;
 
 import model.KuhinjskiAlat;
 import model.Recept;
 import model.Sastojak;
 import model.Slika;
 import net.miginfocom.swing.MigLayout;
+import observer.Observer;
 import util.PogledUtil;
 import view.FormaDugme;
 import view.Labela;
+import view.tabela.recepti.TabelaModelRecepti;
 
-public class DijalogIzmenaRecepta extends JDialog {
+public class DijalogIzmenaRecepta extends JDialog implements Observer {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -9035474567150373649L;
 
-	public DijalogIzmenaRecepta(Recept recept) {
+	
+	public DijalogIzmenaRecepta(Recept recept,
+	ReceptiKontroler receptiKontroler, TabelaModelRecepti tabelaModelRecepti) {
 		 
         Font  fntNaslov      = PogledUtil.getVelikiNaslovFont();
         Font  fntTekstPolje  = PogledUtil.getTeksPoljeFont();
@@ -47,7 +61,10 @@ public class DijalogIzmenaRecepta extends JDialog {
         JLabel lblImage  = new JLabel();
         lblImage.setPreferredSize(new Dimension(80, 80));
         lblImage.setIcon(new ImageIcon(getClass().getResource("/recipe.png")));
-
+        
+        JTextArea taNaziv=makeArea(3);
+        taNaziv.append(recept.getNazivRecepta());
+        
         JTextArea taSastojci = makeArea(3);
 		for (Sastojak s : recept.getSastojci()) {
 			taSastojci.append(s.getnaziv() + "\n");
@@ -62,15 +79,19 @@ public class DijalogIzmenaRecepta extends JDialog {
 		for (Slika slika : recept.getSlike()) {
 			taPutanja.append(slika.getLink() + "\n");
 		}
-
+		JScrollPane saNaziv= wrap(taNaziv);
         JScrollPane spSastojci = wrap(taSastojci);
         JScrollPane spAlat     = wrap(taAlat);
         JScrollPane spOpis     = wrap(taOpis);
         JScrollPane spPutanja  = wrap(taPutanja);
 
+        
         content.add(lblNaslov, "align center");
         content.add(lblImage,  "align center");
 
+        content.add(new Labela("Naziv recepta:", fntTekstPolje, clrForeground), "gapy 10");
+        content.add(saNaziv,"growx, h 50!");
+        
         content.add(new Labela("Sastojci:", fntTekstPolje, clrForeground), "gapy 10");
         content.add(spSastojci, "growx, h 80!");
 
@@ -84,10 +105,69 @@ public class DijalogIzmenaRecepta extends JDialog {
         content.add(spPutanja, "growx, h 70!");
 
        
-
         FormaDugme btnSacuvaj = new FormaDugme("Sačuvaj izmene", clrPrimarna, clrForeground, 125, 20);
         content.add(btnSacuvaj, "align center, w 160!, h 36!, gaptop 10");
+        
+        //izmena recepta
+        btnSacuvaj.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			
+			String naziv=taNaziv.getText().trim();
+				
+			String []deloviSastojci=taSastojci.getText().split(",");
+			ArrayList<Sastojak>sastojci=new ArrayList<>();
+			for(String deo:deloviSastojci) {
+				String sastojak=deo.trim();
+				if(!sastojak.isEmpty()) {
+					sastojci.add(new Sastojak(sastojak,null));
+				}
+			}
+			
+	    	String[] deloviAlat = taAlat.getText().split(",");
+	    	ArrayList<KuhinjskiAlat> alati = new ArrayList<>();
 
+	    	for (String deo : deloviAlat) {
+	    	    String alat = deo.trim();
+	    	    if (!alat.isEmpty()) {
+	    	        alati.add(new KuhinjskiAlat(alat));
+	    	    }
+	    	}		
+	    	
+	    	String uputstvo = taOpis.getText().trim();	
+	    	
+	    	String[] deloviSlike = taPutanja.getText().split(",");
+	    	ArrayList<Slika> putanje = new ArrayList<>();
+
+	        for (String deo : deloviSlike) {
+	            String putanja = deo.trim();
+	            if (!putanja.isEmpty()) {
+	                putanje.add(new Slika(putanja));
+	            }
+	        }
+	    	
+	        LocalDate datumIzmene=LocalDate.now();
+	    	try {
+		    	receptiKontroler.izmeniRecept(naziv,uputstvo,
+		    			alati,sastojci,putanje, datumIzmene);
+		    	tabelaModelRecepti.izmeniSastojak(
+		    			receptiKontroler.dobaviReceptPoNazivu(taNaziv.getText().trim()));
+		    	JOptionPane.showMessageDialog(null, "Recept uspešno izmenjen!");
+		    	taNaziv.setText("");
+		    	taOpis.setText("");
+		    	taSastojci.setText("");
+		    	taAlat.setText("");
+		    	taPutanja.setText("");
+	    	}
+	    	catch (Exception ex) {
+	    		JOptionPane.showMessageDialog(null, ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+			}
+	    	
+			}
+		});        
+        
+        
         JScrollPane sp = new JScrollPane(content,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -97,8 +177,8 @@ public class DijalogIzmenaRecepta extends JDialog {
 
         setContentPane(sp);
 
-        setMinimumSize(new Dimension(520, 480));
-        setPreferredSize(new Dimension(520, 680));
+        setMinimumSize(new Dimension(600, 800));
+        setPreferredSize(new Dimension(600, 800));
         pack();
     }
 
@@ -115,5 +195,11 @@ public class DijalogIzmenaRecepta extends JDialog {
         sp.setPreferredSize(new Dimension(400, 80));
         return sp;
     }
+    
+	@Override
+	public void updatePerformed(EventObject e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

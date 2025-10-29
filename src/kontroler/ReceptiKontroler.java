@@ -57,5 +57,9 @@ public class ReceptiKontroler {
 		List<Recept> lista= ReceptiLista.getInstance().dobaviRecepte();
 		return lista;
 	}
+	
+	public boolean obrisiRecept(Recept recept) {
+	    return model.podaci.ReceptiLista.getInstance().obrisiRecept(recept);
+	}
 
 }

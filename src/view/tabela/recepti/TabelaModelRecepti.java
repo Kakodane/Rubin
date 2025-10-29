@@ -156,4 +156,8 @@ public class TabelaModelRecepti extends AbstractTableModel implements Publisher{
 	}
 	
 
+	public void removeRecept(int rowIndex) {
+	    fireTableRowsDeleted(rowIndex, rowIndex);
+	}
+
 }

@@ -13,6 +13,9 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import kontroler.ReceptiKontroler;
+import model.Recept;
+
 public class DugmeBrisanjeRecepti extends AbstractCellEditor
 implements TableCellRenderer, TableCellEditor, MouseListener {
 	
@@ -23,6 +26,7 @@ implements TableCellRenderer, TableCellEditor, MouseListener {
 	private JTable tabela;
 	private JButton prikazDugme;
 	private JButton akcijaDugme;
+	private ReceptiKontroler receptiKontroler;
 	private boolean isEditorActive = false;
 	
 	public DugmeBrisanjeRecepti(JTable tabela, int kolona) {
@@ -31,17 +35,49 @@ implements TableCellRenderer, TableCellEditor, MouseListener {
 		this.tabela.getColumnModel().getColumn(kolona).setCellRenderer(this);
 		this.tabela.getColumnModel().getColumn(kolona).setCellEditor(this);
 		this.tabela.addMouseListener(this);
-		
+		this.receptiKontroler=new ReceptiKontroler();
 		this.prikazDugme = new JButton("Obriši");
 		this.akcijaDugme = new JButton("Obriši");
 		
 		this.akcijaDugme.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireEditingStopped();
-				JOptionPane.showMessageDialog(tabela, "Funkcionalnost je u izradi", "Nedovršena funkcionalnost", JOptionPane.INFORMATION_MESSAGE);
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+
+		        int selectedRow = tabela.getSelectedRow();
+		        if (selectedRow == -1) return;
+		        int confirm = JOptionPane.showConfirmDialog(
+		            tabela,
+		            "Da li ste sigurni da želite da obrišete recept?",
+		            "Potvrda brisanja",
+		            JOptionPane.YES_NO_OPTION
+		        );
+		        if (confirm != JOptionPane.YES_OPTION) return;
+
+		        TabelaModelRecepti model = (TabelaModelRecepti) tabela.getModel();
+		        Recept receptZaBrisanje = model.getAt(selectedRow);
+
+		        boolean uspesno = receptiKontroler.obrisiRecept(receptZaBrisanje);
+
+		        if (uspesno) {
+		            model.removeRecept(selectedRow);
+		            JOptionPane.showMessageDialog(
+		                tabela,
+		                "Recept je uspešno obrisan.",
+		                "Brisanje recepta",
+		                JOptionPane.INFORMATION_MESSAGE
+		            );
+		        } else {
+		            JOptionPane.showMessageDialog(
+		                tabela,
+		                "Došlo je do greške pri brisanju recepta.",
+		                "Greška",
+		                JOptionPane.ERROR_MESSAGE
+		            );
+		        }
+
+		       
+		        fireEditingStopped();
+		    }
 		});
 		
 		this.isEditorActive = false;
@@ -92,4 +128,6 @@ implements TableCellRenderer, TableCellEditor, MouseListener {
 			boolean hasFocus, int row, int column) {
 		return prikazDugme;
 	}
+	
+	
 }
