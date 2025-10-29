@@ -21,7 +21,7 @@ public class TabelaModelRecepti extends AbstractTableModel implements Publisher{
 		this.recepti = recepti;
 	}
 
-	public void dodajSastojak(Recept recept) {
+	public void dodajRecept(Recept recept) {
 		this.recepti.add(recept);
 	}
 	

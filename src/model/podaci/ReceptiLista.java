@@ -2,6 +2,7 @@ package model.podaci;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -69,6 +70,10 @@ public class ReceptiLista {
 			}
 		}
 		return null;
+	}
+	
+	public List<Recept> dobaviRecepte(){
+		return recepti;
 	}
 	
 }

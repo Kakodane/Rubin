@@ -4,23 +4,37 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.EventObject;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import izuzeci.BadFormatException;
+import izuzeci.MissingValueException;
+import izuzeci.NotSavedException;
+import kontroler.ReceptiKontroler;
+import model.KuhinjskiAlat;
+import model.Recept;
+import model.Sastojak;
+import model.Slika;
 import net.miginfocom.swing.MigLayout;
 import observer.Observer;
 import util.PogledUtil;
 import view.FormaDugme;
 import view.Labela;
 import view.TekstPolje;
+import view.tabela.recepti.TabelaModelRecepti;
 
 public class PanelDodajRecept extends JPanel implements Observer{
-	public PanelDodajRecept() {
+	public PanelDodajRecept(ReceptiKontroler receptiKontroler, TabelaModelRecepti tabelaModelRecepti) {
 		setName("Dodavanje recepta");
 		setVisible(true);
 		Font fntNaslov = PogledUtil.getVelikiNaslovFont();
@@ -37,7 +51,12 @@ public class PanelDodajRecept extends JPanel implements Observer{
 		Image image = new ImageIcon(this.getClass().getResource("/recipe.png")).getImage();
 		lblImage.setIcon(new ImageIcon(image));
 		
-		
+		Labela lblNaziv = new Labela("Naziv:", fntTekstPolje, clrForeground);
+		JTextArea taNaziv = new JTextArea(6, 40);
+		taNaziv.setLineWrap(true);
+		taNaziv.setWrapStyleWord(true);
+		taNaziv.setRows(1);
+		JScrollPane spNaziv = new JScrollPane(taNaziv);
 		
 		Labela lblSastojci = new Labela("Sastojci:", fntTekstPolje, clrForeground);
 		JTextArea taSastojci = new JTextArea(6, 40); // redovi, kolone (samo hint)
@@ -69,6 +88,69 @@ public class PanelDodajRecept extends JPanel implements Observer{
 		
 		
 		FormaDugme btnDodaj = new FormaDugme("Dodaj recept", clrPrimarna, clrForeground,125,20);
+		btnDodaj.addActionListener(new ActionListener() {
+			
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	String naziv=taNaziv.getText().trim();
+		    	
+		    	String[] deloviSastojci = taSastojci.getText().split(",");
+		    	ArrayList<Sastojak> sastojci = new ArrayList<>();
+
+		    	for (String deo : deloviSastojci) {
+		    	    String sastojak = deo.trim();
+		    	    if (!sastojak.isEmpty()) {
+		    	        sastojci.add(new Sastojak(sastojak, null));
+		    	    }
+		    	}
+		    	
+		    	String[] deloviAlat = taAlat.getText().split(",");
+		    	ArrayList<KuhinjskiAlat> alati = new ArrayList<>();
+
+		    	for (String deo : deloviAlat) {
+		    	    String alat = deo.trim();
+		    	    if (!alat.isEmpty()) {
+		    	        alati.add(new KuhinjskiAlat(alat));
+		    	    }
+		    	}
+		        
+		        String uputstvo = taOpis.getText().trim();
+		        
+		        LocalDate datumDodavanja=LocalDate.now();
+		        
+		        String[] deloviSlike = taPutanjaDoSlike.getText().split(",");
+		        ArrayList<Slika> putanje = new ArrayList<>();
+
+		        for (String deo : deloviSlike) {
+		            String putanja = deo.trim();
+		            if (!putanja.isEmpty()) {
+		                putanje.add(new Slika(putanja));
+		            }
+		        }
+
+		        try {
+		            // Poziva se kontroler (ovde ga moraš prethodno proslediti kroz konstruktor panela)
+		            Recept recept=receptiKontroler.dodajRecept(naziv,uputstvo,datumDodavanja,sastojci, alati, putanje);
+		            /*if (recept != null) {
+						tabelaModelRecepti.dodajRecept(recept);
+						tabelaModelRecepti.notifyObservers();
+						//zatvori();
+					}*/
+		            JOptionPane.showMessageDialog(null, "Recept uspešno dodat!");
+		            taNaziv.setText("");
+		            taOpis.setText("");
+		            taSastojci.setText("");
+		            taAlat.setText("");
+		            taPutanjaDoSlike.setText("");
+		        } catch (MissingValueException ex) {
+		            JOptionPane.showMessageDialog(null, ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+		        } catch (BadFormatException ex) {
+		            JOptionPane.showMessageDialog(null, ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+		        } /*catch (NotSavedException ex) {
+		            JOptionPane.showMessageDialog(null, ex.getMessage(), "Greška", JOptionPane.ERROR_MESSAGE);
+		        }*/
+		    }
+		});
 		
 		setLayout(new MigLayout(
 			    "fillx, insets 20 40 20 40, wrap 1",
@@ -80,6 +162,9 @@ public class PanelDodajRecept extends JPanel implements Observer{
 			add(lblImage,  "align center");
 
 			// polja (labela pa textarea u scrollu)
+			add(lblNaziv,       "gapy 10");
+			add(spNaziv,        "growx, h 30!, w 100%");
+			
 			add(lblSastojci,       "gapy 10");
 			add(spSastojci,        "growx, h 80!, w 100%");
 
@@ -92,8 +177,6 @@ public class PanelDodajRecept extends JPanel implements Observer{
 			add(lblPutanjaDoSlike, "gapy 10");
 			add(spPutanjaDoSlike,  "growx, h 70!,  w 100%");
 
-		
-
 			// dugme normalne širine
 			add(btnDodaj,          "align center, w 160!, h 36!, gaptop 10");
 	}
@@ -103,4 +186,5 @@ public class PanelDodajRecept extends JPanel implements Observer{
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

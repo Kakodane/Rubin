@@ -2,7 +2,7 @@
   <recepti>
     <model.Recept>
       <nazivRecepta>Recept neki</nazivRecepta>
-      <uputstvo>Nozem u glavu</uputstvo>
+      <uputstvo>Lagano</uputstvo>
       <datumKreiranja>2025-10-28</datumKreiranja>
       <sastojci>
         <model.Sastojak>
@@ -20,6 +20,58 @@
         </model.KuhinjskiAlat>
       </alati>
       <slike/>
+    </model.Recept>
+    <model.Recept>
+      <nazivRecepta>palacinke</nazivRecepta>
+      <uputstvo>uputstvo</uputstvo>
+      <datumKreiranja>2025-10-29</datumKreiranja>
+      <sastojci>
+        <model.Sastojak>
+          <naziv>jaja</naziv>
+        </model.Sastojak>
+        <model.Sastojak>
+          <naziv>kisela</naziv>
+        </model.Sastojak>
+        <model.Sastojak>
+          <naziv>brasno</naziv>
+        </model.Sastojak>
+      </sastojci>
+      <alati>
+        <model.KuhinjskiAlat>
+          <naziv>mikser</naziv>
+        </model.KuhinjskiAlat>
+        <model.KuhinjskiAlat>
+          <naziv>tiganj</naziv>
+        </model.KuhinjskiAlat>
+      </alati>
+      <slike>
+        <model.Slika>
+          <link>link</link>
+        </model.Slika>
+      </slike>
+    </model.Recept>
+    <model.Recept>
+      <nazivRecepta>przenice</nazivRecepta>
+      <uputstvo>priprema</uputstvo>
+      <datumKreiranja>2025-10-29</datumKreiranja>
+      <sastojci>
+        <model.Sastojak>
+          <naziv>jaja</naziv>
+        </model.Sastojak>
+        <model.Sastojak>
+          <naziv>mleko</naziv>
+        </model.Sastojak>
+      </sastojci>
+      <alati>
+        <model.KuhinjskiAlat>
+          <naziv>tiganj</naziv>
+        </model.KuhinjskiAlat>
+      </alati>
+      <slike>
+        <model.Slika>
+          <link>putanja</link>
+        </model.Slika>
+      </slike>
     </model.Recept>
   </recepti>
 </model.podaci.ReceptiLista>
