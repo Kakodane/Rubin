@@ -3,6 +3,7 @@ package kontroler;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 import enums.Uloga;
 import izuzeci.BadFormatException;
@@ -92,14 +93,22 @@ public class KorisnikKontroler {
 	
 	private Uloga getUloga(String uloga) {
 		switch (uloga) {
-		case "ADMINISTRATOR":
+		case "Administrator":
 			return Uloga.ADMINISTRATOR;
-		case "MODERATOR":
+		case "Moderator":
 			return Uloga.MODERATOR;
-		case "ULOGOVANKORISNIK":
+		case "Ulogovan korisnik":
 			return Uloga.ULOGOVANKORISNIK;
 		default:
 			return null;
 		}
+	}
+	
+	public void obrisiKorisnika(String korisnickoIme){
+		KorisniciLista.getInstance().obrisiKorisnika(korisnickoIme);
+	}
+	
+	public ArrayList<Korisnik> filtrirajKorisnike(String uloga){
+		return KorisniciLista.getInstance().filtrirajKorisnike(getUloga(uloga));
 	}
 }

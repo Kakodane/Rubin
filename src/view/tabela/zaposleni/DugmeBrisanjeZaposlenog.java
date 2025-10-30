@@ -13,6 +13,9 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import kontroler.KorisnikKontroler;
+import model.Korisnik;
+
 public class DugmeBrisanjeZaposlenog extends AbstractCellEditor
 	implements TableCellRenderer, TableCellEditor, MouseListener  {
 
@@ -24,6 +27,7 @@ public class DugmeBrisanjeZaposlenog extends AbstractCellEditor
 	private JButton prikazDugme;
 	private JButton akcijaDugme;
 	private boolean isEditorActive = false;
+	private KorisnikKontroler korisnikKontroler;
 	
 	public DugmeBrisanjeZaposlenog(JTable tabela, int kolona) {
 		
@@ -32,17 +36,42 @@ public class DugmeBrisanjeZaposlenog extends AbstractCellEditor
 		this.tabela.getColumnModel().getColumn(kolona).setCellEditor(this);
 		this.tabela.addMouseListener(this);
 		
+		this.korisnikKontroler = new KorisnikKontroler();
+		
 		this.prikazDugme = new JButton("Obriši");
 		this.akcijaDugme = new JButton("Obriši");
 		
 		this.akcijaDugme.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fireEditingStopped();
-				JOptionPane.showMessageDialog(tabela, "Funkcionalnost je u izradi", "Nedovršena funkcionalnost", JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fireEditingStopped();
+                int selectedRow = tabela.getSelectedRow();
+                if (selectedRow != -1) {
+                	int red = tabela.convertRowIndexToModel(selectedRow);
+                    TabelaModelZaposleni model = (TabelaModelZaposleni) tabela.getModel();
+                    Korisnik korisnik = model.getKorisnikAt(red);
+
+                    int potvrda = JOptionPane.showConfirmDialog(
+                            tabela,
+                            "Da li ste sigurni da želite da obrišete zaposlenog: "
+                                    + korisnik.getIme() + " " + korisnik.getPrezime() + "?",
+                            "Potvrda brisanja",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (potvrda == JOptionPane.YES_OPTION) {
+                        korisnikKontroler.obrisiKorisnika(korisnik.getKorisnickiNalog().getKorisnickoIme());
+                        model.azurirajTabelu();
+                        JOptionPane.showMessageDialog(
+                                tabela,
+                                "Zaposleni je uspešno obrisan!",
+                                "Uspeh",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                }
+            }
+        });
 		
 		this.isEditorActive = false;
 	}

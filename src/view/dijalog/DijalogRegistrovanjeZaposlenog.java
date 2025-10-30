@@ -62,23 +62,23 @@ public class DijalogRegistrovanjeZaposlenog extends JDialog {
 		lblImage.setIcon(new ImageIcon(image));
 		
 		Labela lblIme = new Labela("Ime:", fntLabela, clrTercijarna);
-		tfIme = new TekstPolje("yy", fntTekstPolje, 140, 30);
+		tfIme = new TekstPolje("", fntTekstPolje, 140, 30);
 		
 		Labela lblPrezime = new Labela("Prezime:", fntLabela, clrTercijarna);
-		tfPrezime = new TekstPolje("yy", fntTekstPolje, 140, 30);
+		tfPrezime = new TekstPolje("", fntTekstPolje, 140, 30);
 				
 		Labela lblTelefon = new Labela("Telefon:", fntLabela, clrTercijarna);
-		tfTelefon = new TekstPolje("54353", fntTekstPolje, 140, 30);
+		tfTelefon = new TekstPolje("", fntTekstPolje, 140, 30);
 		
 
 		Labela lblDatumRodjenja = new Labela("Datum rodjenja:", fntLabela, clrTercijarna);
-		tfDatumRodjenja = new TekstPolje("1998-12-12", fntTekstPolje, 140, 30);
+		tfDatumRodjenja = new TekstPolje("", fntTekstPolje, 140, 30);
 		
 		Labela lblKorIme = new Labela("Korisničko ime:", fntLabela, clrTercijarna);
-		tfKorIme = new TekstPolje("yy", fntTekstPolje, 140, 30);
+		tfKorIme = new TekstPolje("", fntTekstPolje, 140, 30);
 		
 		Labela lblLozinka = new Labela("Lozinka:", fntLabela, clrTercijarna);
-		tfLozinka = new LozinkaPolje("yyAA234234", 140, 30);
+		tfLozinka = new LozinkaPolje("", 140, 30);
 		
 		Labela lblTipZaposlenog = new Labela("Tip zaposlenog:", fntLabela, clrTercijarna);
 		PadajucaLista plTipoviZaposlenih = new PadajucaLista(PogledUtil.getTipoviKorisnikaAdminRegistracija(),
@@ -90,9 +90,11 @@ public class DijalogRegistrovanjeZaposlenog extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Korisnik korisnik = korisnikKontroler.registrujKorisnika(tfIme.getText(), tfPrezime.getText(), tfTelefon.getText(), tfDatumRodjenja.getText(), tfKorIme.getText(), String.valueOf(tfLozinka.getPassword()),
+					korisnikKontroler.registrujKorisnika(tfIme.getText(), tfPrezime.getText(), tfTelefon.getText(), tfDatumRodjenja.getText(), tfKorIme.getText(), String.valueOf(tfLozinka.getPassword()),
 							(String) plTipoviZaposlenih.getSelectedItem());
+					tabelaModelZaposleni.azurirajTabelu();
 					tabelaModelZaposleni.notifyObservers();
+					JOptionPane.showMessageDialog(null, "Novi korisnik uspesno registrovan.", "Uspeh", JOptionPane.INFORMATION_MESSAGE);
 					zatvori();
 				} catch (MissingValueException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), e1.getNaslov(), JOptionPane.ERROR_MESSAGE);

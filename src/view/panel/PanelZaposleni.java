@@ -79,6 +79,15 @@ public class PanelZaposleni extends JPanel implements Observer {
 		});
 		
 		FormaDugme btnPretrazi = new FormaDugme("Pretraži", clrPrimarna, clrForeground, 75, 20);
+		btnPretrazi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TabelaModelZaposleni model = (TabelaModelZaposleni) tabelaZaposleni.getModel();
+				model.setKorisnici(korisnikKontroler.filtrirajKorisnike((String) plTipoviZaposlenih.getSelectedItem()));
+				model.azurirajTabelu();
+			}
+		});
 		
 		setLayout(new MigLayout("", "80[]40[]", "90[]30[]40[]"));
 		

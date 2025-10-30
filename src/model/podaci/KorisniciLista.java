@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import enums.Uloga;
 import model.Korisnik;
 
 @XStreamAlias("korisniciLista")
@@ -77,5 +78,20 @@ public class KorisniciLista {
 
     public Korisnik dobaviKorisnikaPoKorisnickomId(int id){
         return korisnici.stream().filter(u-> u.getId()==id).findFirst().orElse(null);
+    }
+    
+    public void obrisiKorisnika(String korisnickoIme) {
+    	Korisnik korisnik = this.dobaviKorisnikaPoKorisnickomImenu(korisnickoIme);
+    	korisnici.remove(korisnik);
+    }
+    
+    public ArrayList<Korisnik> filtrirajKorisnike(Uloga uloga){
+    	ArrayList<Korisnik> filtriraniKorisnici = new ArrayList<Korisnik>();
+    	for(Korisnik korisnik : korisnici) {
+    		if(korisnik.getKorisnickiNalog().getUloga().equals(uloga)) {
+    			filtriraniKorisnici.add(korisnik);
+    		}
+    	}
+    	return filtriraniKorisnici;
     }
 }

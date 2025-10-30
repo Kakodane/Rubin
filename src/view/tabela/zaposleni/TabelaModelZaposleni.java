@@ -39,6 +39,19 @@ public class TabelaModelZaposleni extends AbstractTableModel implements Publishe
 		}
 	}
 	
+	public Korisnik getKorisnikAt(int index) {
+	    return korisnici.get(index);
+	}
+	
+	public void setKorisnici(List<Korisnik> korisnici) {
+		this.korisnici = korisnici;
+	}
+	
+	public void azurirajTabelu() {
+		 fireTableDataChanged();
+		 notifyObservers();
+	}
+	
 	@Override
 	public int getColumnCount() {
 		return 6;
